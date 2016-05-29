@@ -1,0 +1,11 @@
+library(data.table)
+setwd("D:/Priyanka/Coursera/4.EDA/assignment1/")
+data <- fread("household_power_consumption.txt", header = TRUE, sep=';' ,na.strings = "?", colClasses = c("character","character",rep("numeric",7)))
+data$Date <- as.Date(data$Date, "%d/%m/%Y")
+data_1 <- data[Date >= '2007-02-01' & Date <='2007-02-02']
+data_1$DateTime <- paste(as.Date(data_1$Date), data_1$Time)
+data_1$DateTime <- as.POSIXct(data_1$DateTime)
+par(mfrow=c(1,1))
+plot(data_1$Global_active_power ~ data_1$DateTime, ylab = "Global Active Power(Kilowatts)", xlab = "", type="l")
+dev.copy(png, file="plot2.png", height=480, width=480)
+dev.off()

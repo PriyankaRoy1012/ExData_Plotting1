@@ -1,0 +1,20 @@
+library(data.table)
+setwd("D:/Priyanka/Coursera/4.EDA/assignment1/")
+data <- fread("household_power_consumption.txt", header = TRUE, sep=';' ,na.strings = "?", colClasses = c("character","character",rep("numeric",7)))
+data$Date <- as.Date(data$Date, "%d/%m/%Y")
+data_1 <- data[Date >= '2007-02-01' & Date <='2007-02-02']
+data_1$DateTime <- paste(as.Date(data_1$Date), data_1$Time)
+data_1$DateTime <- as.POSIXct(data_1$DateTime)
+
+par(mfrow=c(2,2))
+with(data_1, {plot(DateTime, Global_active_power, type = "l", ylab = "GLoabl Active Power", xlab = "")
+  plot(DateTime, Voltage, type= "l", xlab = "datetime", ylab = "Voltage")
+  plot (DateTime,Sub_metering_1 , type="l" , col='black', ylab="Energy sub metering", xlab = "")
+  lines( DateTime,Sub_metering_2 , col="red")
+  lines( DateTime,Sub_metering_3 , col="blue")
+  legend("topright",bty= "n",legend = c("Sub_metering_1","Sub_metering_2","Sub_metering_3"), col=c("black", "red", "blue"), lwd=1)
+  plot(DateTime, Global_reactive_power, type = "l",xlab = "datetime", ylab = "Global_reactive_power")
+})
+
+dev.copy(png, file="plot4.png", height=480, width=480)
+dev.off()
